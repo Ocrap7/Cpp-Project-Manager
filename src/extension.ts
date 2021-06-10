@@ -196,12 +196,6 @@ const createClass = async () => {
 };
 
 const createProject = async (local?: boolean) => {
-    if (!vscode.workspace.workspaceFolders) {
-        vscode.window.showErrorMessage(
-            'Open a folder or workspace before creating a project!'
-        );
-        return;
-    }
     let templates = [];
 
     try {
@@ -259,9 +253,9 @@ const createProject = async (local?: boolean) => {
             await selectFolderAndDownload(
                 data,
                 selected,
+                { path: projectPath, projectName },
                 true,
-                true,
-                projectPath
+                true
             );
             vscode.workspace
                 .getConfiguration('files')
@@ -281,9 +275,9 @@ const createProject = async (local?: boolean) => {
             await selectFolderAndDownload(
                 data,
                 selected,
+                { path: projectPath, projectName },
                 local,
-                false,
-                projectPath
+                false
             );
             vscode.workspace
                 .getConfiguration('files')
@@ -300,10 +294,10 @@ const createProject = async (local?: boolean) => {
                     vscode.ConfigurationTarget.Workspace
                 );
         }
-        await vscode.commands.executeCommand(
-            'vscode.openFolder',
-            vscode.Uri.parse(fileUrl(projectPath))
-        );
+        // await vscode.commands.executeCommand(
+        //     'vscode.openFolder',
+        //     vscode.Uri.parse(fileUrl(projectPath))
+        // );
     } catch (error) {
         console.log(error);
         if (local) {
@@ -322,33 +316,58 @@ const createProject = async (local?: boolean) => {
 const selectFolderAndDownload = async (
     files: CppProjectsJSON,
     templateName: string | undefined,
+    data: { path?: string; projectName?: string },
     local?: boolean,
-    custom?: boolean,
-    path?: string
+    custom?: boolean
 ) => {
-    if (!templateName || !vscode.workspace.workspaceFolders) {
+    if (!templateName) {
         return;
     }
 
-    if (vscode.workspace.workspaceFolders.length > 1) {
+    if (
+        vscode.workspace.workspaceFolders &&
+        vscode.workspace.workspaceFolders.length > 1
+    ) {
         try {
             const chosen = await vscode.window.showWorkspaceFolderPick();
             if (!chosen) {
                 return;
             }
             let folder = chosen.uri;
-            await downloadTemplate(files, templateName, folder.fsPath, local);
+            await downloadTemplate(
+                files,
+                templateName,
+                folder.fsPath,
+                data,
+                local
+            );
         } catch (err) {
             vscode.window.showErrorMessage(`C++ Project Manager error: ${err}`);
         }
     } else {
-        downloadTemplate(
-            files,
-            templateName,
-            path ?? vscode.workspace.workspaceFolders[0].uri.fsPath,
-            local,
-            custom
+        console.log(
+            'path',
+            data.path ?? vscode.workspace.workspaceFolders?.[0].uri.fsPath
         );
+        if (vscode.workspace.workspaceFolders) {
+            await downloadTemplate(
+                files,
+                templateName,
+                data.path ?? vscode.workspace.workspaceFolders?.[0].uri.fsPath,
+                data,
+                local,
+                custom
+            );
+        } else if (data.path) {
+            await downloadTemplate(
+                files,
+                templateName,
+                data.path,
+                data,
+                local,
+                custom
+            );
+        }
     }
 };
 
@@ -356,6 +375,7 @@ const downloadTemplate = async (
     files: CppProjectsJSON,
     templateName: string,
     folder: string,
+    projectData: { path?: string; projectName?: string },
     local?: boolean,
     custom?: boolean
 ) => {
@@ -406,6 +426,9 @@ const downloadTemplate = async (
                     );
                     data = await res.text();
                 }
+
+                // if (projectData.projectName)
+                //     data.replace(/@\{ProjectName\}/, projectData.projectName);
 
                 writeFileSync(`${folder}/${f[file]}`, data);
             } catch (error) {
@@ -520,7 +543,7 @@ const createGetterSetter = (getter?: boolean, setter?: boolean) => {
 const createGetter = () => createGetterSetter(true, false);
 const createSetter = () => createGetterSetter(false, true);
 
-function fileUrl(str: string) {
+const fileUrl = (str: string) => {
     if (typeof str !== 'string') {
         throw new Error('Expected a string');
     }
@@ -533,4 +556,4 @@ function fileUrl(str: string) {
     }
 
     return encodeURI('file://' + pathName);
-}
+};
