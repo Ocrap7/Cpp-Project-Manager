@@ -57,57 +57,6 @@
 
 ---
 
-## Release Notes
-
-### 2.0.0
-
-Updated dependencies
-
-Fixed some bugs
-
-Introduced a few more bugs ;)
-
-### 1.7.7
-
-Changed custom templates folder location, now it is safe to save templates and they won't be removed upon extension updates
-
-### 1.7.6
-
-Added support for Visual Studio Build Tools 2019
-
-### 1.7.5
-
-Added "openFiles" property to JSON. It allows the user to set multiple files to open automatically on project creation
-
-### 1.7.4
-
-Fix Easy C++ placeholder not being created when using a custom template
-
-### 1.7.3
-
-New files.json format, now each template can have different directories and blank files created
-
-### 1.7.2
-
-Added "Convert this folder to an Easy C++ Project" command
-
-### 1.7.1
-
-Load extension when the file .vscode/.easycpp is present, avoiding loading it when there is a tasks.json but it is not an Easy C++ project
-
-### 1.7.0
-
-Added support for offline templates if there is no Internet connection avaliable
-
-Added support for custom templates
-
-Added "Open Custom Templates Directory" command
-
-### 1.6.0
-
-Added `Create getter`, `Create setter` and `Create getter and setter` commands. This is in very early stages, so bugs will happen. Please report any bugs to the issues page on GitHub :)
-
-
 [version-badge]: https://vsmarketplacebadge.apphb.com/version/ACharLuk.easy-cpp-projects.svg
 [installs-badge]: https://vsmarketplacebadge.apphb.com/installs/ACharLuk.easy-cpp-projects.svg
 [marketplace]: https://marketplace.visualstudio.com/items?itemName=ACharLuk.easy-cpp-projects
