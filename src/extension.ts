@@ -9,7 +9,7 @@ import fetch from 'node-fetch';
 import { spawn } from 'child_process';
 
 const baseUrl =
-    'https://raw.githubusercontent.com/acharluk/easy-cpp-projects/master';
+    'https://raw.githubusercontent.com/Ocrap7/Cpp-Project-Manager/master';
 
 const customTemplatesFolder = (() => {
     let e = vscode.extensions.getExtension('Ocrap7.cpp-project-manager');
