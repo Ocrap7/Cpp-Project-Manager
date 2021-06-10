@@ -1,0 +1,92 @@
+{
+    "name": "cpp-project-manager",
+    "displayName": "C++ Project Manager",
+    "description": "Create C++ projects easily for GCC, WSL-GCC, Clang and MSVC",
+    "version": "2.0.0",
+    "publisher": "Ocrap7",
+    "engines": {
+        "vscode": "^1.43.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:cppmanager.createProject",
+        "onCommand:cppmanager.createClass",
+        "onCommand:cppmanager.openCustomDir"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "cppmanager.createProject",
+                "title": "C++: Create new project"
+            },
+            {
+                "command": "cppmanager.createClass",
+                "title": "C++: Create new class"
+            },
+            {
+                "command": "cppmanager.createGetterSetter",
+                "title": "C++: Create Getter and Setter"
+            },
+            {
+                "command": "cppmanager.createGetter",
+                "title": "C++: Create Getter"
+            },
+            {
+                "command": "cppmanager.createSetter",
+                "title": "C++: Create Setter"
+            },
+            {
+                "command": "cppmanager.openCustomDir",
+                "title": "C++: Open Custom Templates Directory"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "workbench.action.tasks.test",
+                "key": "f5"
+            },
+            {
+                "command": "workbench.action.tasks.build",
+                "key": "ctrl+f5"
+            }
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "group": "z_commands",
+                    "command": "cppmanager.createGetterSetter",
+                    "when": "editorHasSelection"
+                },
+                {
+                    "group": "z_commands",
+                    "command": "cppmanager.createGetter",
+                    "when": "editorHasSelection"
+                },
+                {
+                    "group": "z_commands",
+                    "command": "cppmanager.createSetter",
+                    "when": "editorHasSelection"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "@types/node": "^12.12.31",
+        "@types/node-fetch": "^2.5.7",
+        "@types/vscode": "^1.43.0",
+        "tslint": "^6.1.2",
+        "typescript": "^3.9.3"
+    },
+    "dependencies": {
+        "node-fetch": "^2.6.0"
+    }
+}
